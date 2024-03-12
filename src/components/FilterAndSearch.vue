@@ -1,19 +1,23 @@
 <script setup>
+
 import { usePizzaStore } from '@/store/PizzaStore.js'
 import { reactive } from 'vue'
 
-const store = usePizzaStore();
+const store = usePizzaStore()
 
 const filters = reactive({
 	sortBy: 'title',
-	searchInput: null
+	searchInput: ''
 })
+
 function sortByPrice() {
-	store.fetchItems('sortBy', filters.sortBy);
+	store.fetchItems(filters.sortBy, filters.searchInput)
 }
+
 function filterItems() {
-	store.fetchItems( 'title', filters.searchInput );
+	store.fetchItems(filters.sortBy, filters.searchInput)
 }
+
 </script>
 
 <template>
@@ -32,10 +36,10 @@ function filterItems() {
 					<img alt="" class="absolute left-3 top-3" src="/search.svg">
 					<input
 						  v-model="filters.searchInput"
-						  @keyup="filterItems"
 						  class="border rounded-md py-2 pl-12 pr-4 outline-none focus:border-gray-400"
 						  placeholder="search..."
-						  type="text" />
+						  type="text"
+						  @keyup="filterItems" />
 				</div>
 			</div>
 		</div>
