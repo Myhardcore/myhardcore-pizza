@@ -4,11 +4,13 @@ import TheHeader from './components/UI/TheHeader.vue'
 import CardList from '@/components/CardList.vue'
 import Drawer from '@/components/Drawer.vue'
 import FilterAndSearch from '@/components/FilterAndSearch.vue'
+import { useCartStore } from '@/store/CartStore.js'
+
 
 </script>
 
 <template>
-	<!--    <Drawer />-->
+	    <Drawer v-if="useCartStore().getCartIsOpened"/>
 	<div class="bg-white w-4/5 m-auto rounded-xl shadow-xl mt-14">
 		<TheHeader />
 		<FilterAndSearch/>

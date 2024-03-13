@@ -2,8 +2,13 @@
 import TheCard from '@/components/UI/TheCard.vue'
 import { usePizzaStore } from '@/store/PizzaStore'
 import { computed } from 'vue'
+import { useCartStore } from '@/store/CartStore.js'
 
 const pizzaStore = usePizzaStore();
+const cartStore = useCartStore();
+function addToCart(item) {
+	cartStore.addToCart(item)
+}
 pizzaStore.fetchFavorites();
 pizzaStore.fetchItems('title', '');
 const items = computed(() => pizzaStore.getItems);
@@ -19,7 +24,9 @@ const items = computed(() => pizzaStore.getItems);
 				 :isFavorite="item.isFavorite"
 				 :price="item.price"
 				 :title="item.title"
-				 @addToFavorite="pizzaStore.addToFavorites(item)" />
+				 :isAdded="item.itemIsAdded"
+				 @addToFavorite="pizzaStore.addToFavorites(item)"
+				 @addToCart="addToCart(item)"/>
 	</div>
 </template>
 

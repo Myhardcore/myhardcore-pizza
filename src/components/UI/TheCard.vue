@@ -1,10 +1,11 @@
 <script setup>
-defineEmits(['addToFavorite']);
+defineEmits(['addToFavorite', 'addToCart']);
 defineProps({
 	title: String,
 	price: Number,
 	imgUrl: String,
-	isFavorite: Boolean
+	isFavorite: Boolean,
+	isAdded: Boolean
 
 })
 
@@ -22,7 +23,7 @@ defineProps({
 					<span class="text-slate-400"> Price </span>
 					<span class="font-bold"> {{ price }} $ </span>
 				</div>
-				<img :src="isAdded ? '/checked.svg' : '/plus.svg'" alt="Plus" @click="null">
+				<img @click="$emit('addToCart')" :src="isAdded ? '/checked.svg' : '/plus.svg'" alt="Plus">
 			</div>
 		</div>
 	</div>

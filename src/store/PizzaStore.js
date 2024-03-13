@@ -1,14 +1,15 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
+import { useCartStore } from '@/store/CartStore.js'
 
 
 export const usePizzaStore = defineStore('pizzas', {
-
+    
     state: () => ({
         items: [],
-        favorites: [],
+        favorites: []
     }),
-
+    
     actions: {
         fetchItems(filterValue, searchValue) {
             try {
@@ -21,15 +22,20 @@ export const usePizzaStore = defineStore('pizzas', {
                       }).then((response) => {
                     this.items = response.data.map((obj) => ({
                         ...obj,
-                        isFavorite: false
-                    }));
-                    
-                    this.items.forEach((item) =>{
-                        // if(this.favorites.includes(item.id)){
-                        //     item.isFavorite = true
-                        // }
-                        if(this.favorites.some(el => el.parentId === item.id)){
+                        isFavorite: false,
+                        itemIsAdded: false
+                    }))
+                    //запомним сердечки при загрузке
+                    this.items.forEach((item) => {
+                        // noinspection JSUnresolvedVariable
+                        if (this.favorites.some(el => el.parentId === item.id)) {
                             item.isFavorite = true
+                        }
+                    })
+                    //запомним добавленные к корзину, при использовании фильтра
+                    this.items.forEach(item => {
+                        if (useCartStore().getCartItems.some(el => el.id === item.id)) {
+                            item.itemIsAdded = true
                         }
                     })
                 })
@@ -37,38 +43,48 @@ export const usePizzaStore = defineStore('pizzas', {
                 console.log(err)
             }
         },
+        addItem(item) {
+            item.itemIsAdded = true
+            console.log(this.items)
+        },
+        removeItem(item) {
+            item.itemIsAdded = false
+        },
         
-        fetchFavorites(){
+        fetchFavorites() {
             try {
+                
                 axios.get('https://803aa6e687528694.mokky.dev/favorites').then((response) => {
-                    // this.favorites = response.data.map((item) => item.parentId);
                     this.favorites = response.data
-                    console.log(this.favorites)
                 })
             } catch (err) {
                 console.log(err)
             }
         },
         
-        addToFavorites(item) {
-            if(!item.isFavorite){
+        async addToFavorites(item) {
+            if (!item.isFavorite) {
                 item.isFavorite = true
-                axios.post('https://803aa6e687528694.mokky.dev/favorites', {
+                const obj = {
                     parentId: item.id
-                })
+                }
+                const { data } = await axios.post('https://803aa6e687528694.mokky.dev/favorites', obj)
+                this.favorites.push({ parentId: item.id, id: data.id })
+                console.log('add, ', this.favorites)
             } else {
-                item.isFavorite = false;
-                const deleteId= this.favorites.find(el => el.parentId === item.id).id
-                axios.delete(`https://803aa6e687528694.mokky.dev/favorites/${deleteId}`)
+                item.isFavorite = false
+                const deleteId = this.favorites.find(el => el.parentId === item.id).id
+                await axios.delete(`https://803aa6e687528694.mokky.dev/favorites/${deleteId}`)
+                this.favorites = this.favorites.filter(el => el.parentId !== item.id)
             }
             
-        },
-       
+        }
+        
     },
-
+    
     getters: {
         getItems(state) {
             return state.items
-        },
+        }
     }
 })

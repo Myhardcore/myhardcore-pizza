@@ -1,5 +1,12 @@
 <script setup>
+import { useCartStore } from '@/store/CartStore.js'
+import { computed } from 'vue'
 
+const cartStore = useCartStore();
+function openCart() {
+	cartStore.toggleCart()
+}
+const totalPrice = computed(() => cartStore.getCartTotalPrice)
 </script>
 
 <template>
@@ -13,10 +20,10 @@
             </div>
         </div>
 
-        <ul class="flex gap-10 items-center" >
-            <li class="flex items-center gap-4 cursor-pointer text-gray-500 hover:text-amber-600">
-                <img src="/cart.svg" alt="cart">
-                <b>1205 $</b>
+        <ul class="flex gap-10 items-center">
+            <li @click="openCart" class="flex items-center gap-4 cursor-pointer text-gray-500 hover:text-amber-600" >
+                <img  src="/cart.svg" alt="cart">
+                <b>Open Cart ({{ totalPrice }} $)</b>
             </li>
             <li class="flex items-center gap-3 cursor-pointer text-gray-500 hover:text-amber-600  ">
                 <img src="/heart.svg" alt="favorites">
