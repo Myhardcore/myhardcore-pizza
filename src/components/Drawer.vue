@@ -12,9 +12,9 @@ const cartTax = computed(() => Math.round((useCartStore().getCartTotalPrice * 0.
 
 <template>
     <!-- Обертка + верхушка корзины-->
-    <div @click="closeCart" class="fixed top-0 left-0 h-full w-full bg-black z-10 opacity-70" ></div>
-    <div class="bg-white w-96 h-full fixed right-0 top-0 z-20 p-8" >
-        <h2 class="text-2xl font-bold mb-8">Cart</h2>
+    <div @click="closeCart" class="fixed top-0 left-0 h-full w-full bg-pinky-pink z-20 opacity-40 overflow-y-hidden"></div>
+    <div class="bg-white w-1/4 h-full fixed right-0 top-0 z-20 p-8 border-l border-pinky-pink overflow-y-hidden" >
+        <h2 class="text-2xl font-bold mb-8 text-pinky-pink">Cart</h2>
         <!-- Рендер итемов в корзине-->
         <CartItemList v-auto-animate/>
 
@@ -22,18 +22,18 @@ const cartTax = computed(() => Math.round((useCartStore().getCartTotalPrice * 0.
         <!-- Детали корзины-->
         <div class="flex flex-col gap-4 my-7">
             <div class="flex gap-2">
-                <span>Total</span>
+                <span class="text-blacky-black">Total</span>
                 <div class="flex-1 border-b border-dashed"></div>
-                <b>{{ totalPrice }} $</b>
+                <b class="text-blacky-black">{{ totalPrice }} $</b>
             </div>
 
             <div class="flex gap-2">
-                <span>Tax 20%</span>
+                <span class="text-blacky-black">Tax 20%</span>
                 <div class="flex-1 border-b border-dashed"></div>
-                <b>{{ cartTax }}$</b>
+                <b class="text-blacky-black">{{ cartTax }}$</b>
             </div>
 
-            <button disabled="" class="mt-5 bg-amber-500 w-full rounded-xl py-3 hover:bg-amber-600 active:bg-amber-700 disabled:bg-slate-300 transition cursor-pointer"> Checkout</button>
+            <button @click="useCartStore().createOrder()" :disabled="totalPrice === 0" class="mt-5 bg-pinky-pink w-full rounded-xl py-3 hover:bg-green-600 active:bg-green-400 disabled:bg-gray-200 transition cursor-pointer text-gray-50"> Checkout</button>
 
         </div>
     </div>

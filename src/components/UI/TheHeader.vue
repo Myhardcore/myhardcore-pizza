@@ -10,26 +10,23 @@ const totalPrice = computed(() => cartStore.getCartTotalPrice)
 </script>
 
 <template>
-    <header class="flex justify-between px-10 py-8 border-b border-slate-200">
+    <header class="sticky top-0 z-10 flex justify-between px-10 py-4 border-b border-pinky-pink bg-white rounded-t-xl">
 
-        <div class="flex items-center gap-4">
-            <img src="/logo.png" alt="Logo" class="size-20">
-            <div >
-                <h2 class="font-bold">MYHARDCORE PIZZA</h2>
-                <p class="text-slate-500">Best pizza all around</p>
-            </div>
+        <div class=" items-center gap-4">
+            <img src="/logo3.png" alt="Logo" class="w-1/3">
+            
         </div>
 
         <ul class="flex gap-10 items-center">
-            <li @click="openCart" class="flex items-center gap-4 cursor-pointer text-gray-500 hover:text-amber-600" >
+            <li @click="openCart" class="flex items-center gap-4 cursor-pointer text-blacky-black hover:text-pinky-pink" >
                 <img  src="/cart.svg" alt="cart">
-                <b>Open Cart ({{ totalPrice }} $)</b>
+                <span>Open Cart ({{ totalPrice }} $)</span>
             </li>
-            <li class="flex items-center gap-3 cursor-pointer text-gray-500 hover:text-amber-600  ">
+            <li class="flex items-center gap-3 cursor-pointer text-blacky-black hover:text-pinky-pink  ">
                 <img src="/heart.svg" alt="favorites">
                 <span>Favorite</span>
             </li>
-            <li class="flex items-center gap-4 cursor-pointer text-gray-500 hover:text-amber-600 ">
+            <li class="flex items-center gap-4 cursor-pointer text-blacky-black hover:text-pinky-pink ">
                 <img src="/profile.svg" alt="profile">
                 <span>Profile</span>
             </li>

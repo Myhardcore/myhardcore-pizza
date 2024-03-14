@@ -14,7 +14,9 @@ const cartItems = computed(() => cartStore.getCartItems)
 				  :imgUrl="item.imageUrl"
 				  :price="item.price"
 				  :title="item.title"
-				  @remove-from-cart="cartStore.addToCart(item)" />
+				  :id="item.id"
+				  @remove-from-cart="cartStore.addToCart(item)"
+		/>
 	</div>
 </template>
 
