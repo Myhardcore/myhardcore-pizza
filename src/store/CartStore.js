@@ -22,9 +22,12 @@ export const useCartStore = defineStore('cart', {
                 item.count = 1
                 this.cartItems.push(item)
                 usePizzaStore().addItem(item)
+                this.cartItems.itemIsAdded = true
             }
+            
+            localStorage.setItem('cart', JSON.stringify(this.cartItems))
             this.calculateTotalPrice()
-            console.log(this.cartItems)
+            
         },
         
         calculateTotalPrice() {
@@ -42,6 +45,7 @@ export const useCartStore = defineStore('cart', {
                     item.count--
                 }
             })
+            localStorage.setItem('cart', JSON.stringify(this.cartItems))
             this.calculateTotalPrice()
         },
         
@@ -55,10 +59,22 @@ export const useCartStore = defineStore('cart', {
                     this.cartTotalPrice = 0
                     this.cartIsOpened = false
                     usePizzaStore().fetchItems('title', '')
+                    localStorage.setItem('cart', JSON.stringify([]))
                 })
             } catch (err) {
                 console.log(err)
             }
+        },
+        
+        fetchCartItems() {
+            
+            if (!this.cartItems) {
+                this.cartItems = []
+            } else {
+                this.cartItems = JSON.parse(localStorage.getItem('cart'))
+                this.calculateTotalPrice()
+            }
+            
         }
     },
     
@@ -71,6 +87,9 @@ export const useCartStore = defineStore('cart', {
         },
         getCartTotalPrice(state) {
             return state.cartTotalPrice
+        },
+        getItemCountValue() {
+            return usePizzaStore().getItems.count
         }
     }
 })

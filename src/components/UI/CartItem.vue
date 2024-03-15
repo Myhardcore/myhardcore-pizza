@@ -1,19 +1,20 @@
 <script setup>
 const props = defineProps(['title', 'price', 'imgUrl', 'id'])
-defineEmits(['removeFromCart', 'itemIncrement']);
+defineEmits(['removeFromCart', 'itemIncrement'])
 import { useCartStore } from '@/store/CartStore.js'
 import { ref } from 'vue'
-const count = ref(1);
+
+const count = ref(localStorage.getItem('cart') ? JSON.parse(localStorage.getItem('cart')).filter(item => item.id === props.id)[0].count : 1)
 
 function increment() {
-	count.value++;
-	useCartStore().counterValue( props.id, 'inc')
+	count.value++
+	useCartStore().counterValue(props.id, 'inc')
 }
 
 function decrement() {
-	if (count.value > 1){
-		count.value--;
-		useCartStore().counterValue( props.id, 'dec')
+	if (count.value > 1) {
+		count.value--
+		useCartStore().counterValue(props.id, 'dec')
 	}
 	
 }
@@ -31,9 +32,9 @@ function decrement() {
 			<div class="flex justify-between mt-2 items-center">
 				<b>{{ price }} $</b>
 				<div class="flex gap-4 items-center">
-					<p @click="decrement" class="cursor-pointer font-bold">-</p>
+					<p class="cursor-pointer font-bold" @click="decrement">-</p>
 					<p class=" border pr-2 pl-2 border-pinky-pink rounded-md">{{ count }}</p>
-					<p @click="increment" class="cursor-pointer font-bold">+</p>
+					<p class="cursor-pointer font-bold" @click="increment">+</p>
 				</div>
 				
 				<img alt="close" class="opacity-40 hover:opacity-100 transition cursor-pointer" src="/close.svg"

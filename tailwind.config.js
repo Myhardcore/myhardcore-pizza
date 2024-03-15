@@ -1,5 +1,9 @@
 /** @type {import('tailwindcss').Config} */
+import plugin from 'tailwindcss/plugin';
+
+
 export default {
+  
   content: [
     "./index.html",
     "./src/**/*.{vue, js,ts,jsx,tsx}",
@@ -12,6 +16,10 @@ export default {
       }
     },
   },
-  plugins: [],
+  plugins: [
+    plugin(function({ addVariant }) {
+      addVariant('active', ['&:active', '&.router-link-active'])
+    })
+  ],
 }
 

@@ -23,7 +23,7 @@ function filterItems() {
 <template>
 	<div class="p-10">
 		<div class="flex justify-between items-center">
-			<h2 class="text-3xl font-bold mb-8 uppercase text-pinky-pink font-extrabold">All pizzas</h2>
+			<h2 class="text-3xl mb-8 uppercase text-pinky-pink font-extrabold">All pizzas</h2>
 
 			<div class="flex gap-4">
 				<select v-model="filters.sortBy" class="py-2 px-3 border rounded-md outline-none border-pinky-pink focus:border-dashed" @change="sortByPrice">

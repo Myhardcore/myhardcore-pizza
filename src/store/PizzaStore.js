@@ -45,10 +45,10 @@ export const usePizzaStore = defineStore('pizzas', {
         },
         addItem(item) {
             item.itemIsAdded = true
-            console.log(this.items)
         },
         removeItem(item) {
             item.itemIsAdded = false
+            console.log(this.items)
         },
         
         fetchFavorites() {
