@@ -9,7 +9,7 @@ import { useCartStore } from '@/store/CartStore.js'
 <template>
 	
 	
-	<div class="fixed top-[50%] left-[50%]  translate-x-[-50%] translate-y-[-50%] w-full h-full bg-gray-200" id="background">
+	<div class="fixed top-[50%] left-[50%]  translate-x-[-50%] translate-y-[-50%] w-full h-full bg-lovely-gray" id="background">
 	</div>
 	
 	<Drawer v-if="useCartStore().getCartIsOpened" />

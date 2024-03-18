@@ -20,7 +20,7 @@ defineProps({
 			<p class="mt-2 text-pinky-pink font-extrabold text-xl"> {{ title }}</p>
 			<div class="flex justify-between mt-5">
 				<div class="flex flex-col">
-					<span class="text-slate-400"> Price </span>
+					<span class="text-lovely-gray"> Price </span>
 					<span class="font-bold text-blacky-black"> {{ price }} $ </span>
 				</div>
 				<img @click="$emit('addToCart')" :src="isAdded ? '/checked.svg' : '/plus.svg'" alt="Plus">

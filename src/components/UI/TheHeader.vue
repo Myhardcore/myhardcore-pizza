@@ -2,7 +2,7 @@
 import { useCartStore } from '@/store/CartStore.js'
 import { computed } from 'vue'
 
-const cartStore = useCartStore()
+const cartStore = useCartStore();
 
 function openCart() {
 	cartStore.toggleCart()
@@ -10,12 +10,13 @@ function openCart() {
 }
 
 const totalPrice = computed(() => cartStore.getCartTotalPrice)
+
 //TODO еще жесткие костыли!
 window.addEventListener('scroll', function() {
-	if (window.scrollY >= 100) {
-		document.querySelector('header').classList.remove('rounded-t-xl', 'py-5')
+	if (window.scrollY > 80) {
+		document.querySelector('header > div').classList.remove('rounded-t-xl', 'py-5')
 	} else {
-		document.querySelector('header').classList.add('rounded-t-xl', 'py-5')
+		document.querySelector('header > div').classList.add('rounded-t-xl', 'py-5' )
 	}
 })
 
@@ -23,8 +24,8 @@ window.addEventListener('scroll', function() {
 
 <template>
 	<header
-		  class="sticky top-0 z-10 flex justify-between px-10 py-5 border-b border-pinky-pink bg-white rounded-t-xl transition-transform duration-300">
-		
+		  class="sticky top-0 z-10 " style="height:136px;">
+		<div class="flex justify-between px-10 py-5 border-b border-pinky-pink bg-white rounded-t-xl transition-all duration-200 ">
 		<div class=" items-center gap-4">
 			<router-link to="/home"><img alt="Logo" class="w-1/3" src="/logo3.png"/></router-link>
 		</div>
@@ -51,8 +52,9 @@ window.addEventListener('scroll', function() {
 				<span>Profile</span>
 			</li>
 		</ul>
+		</div>
 	</header>
 </template>
 
-<style>
+<style scoped>
 </style>

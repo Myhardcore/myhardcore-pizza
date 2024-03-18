@@ -16,6 +16,7 @@ const items = computed(() => pizzaStore.getItems)
 </script>
 
 <template>
+	
 	<div class="grid grid-cols-4 gap-5 p-8 ">
 		<TheCard v-for="item in items"
 				 :key="item.id"
@@ -26,6 +27,8 @@ const items = computed(() => pizzaStore.getItems)
 				 :title="item.title.toUpperCase()"
 				 @addToCart="cartStore.addToCart(item)"
 				 @addToFavorite="pizzaStore.addToFavorites(item)" />
+		
+		
 	</div>
 </template>
 
