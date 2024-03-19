@@ -16,7 +16,7 @@ export const usePizzaStore = defineStore('pizzas', {
                 axios.get('https://803aa6e687528694.mokky.dev/items',
                       {
                           params: {
-                              sortBy: filterValue,
+                              
                               title: `*${searchValue}*`
                           }
                       }).then((response) => {
