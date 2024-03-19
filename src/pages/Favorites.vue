@@ -5,6 +5,7 @@ import { useCartStore } from '@/store/CartStore.js'
 import TheCard from '@/components/UI/TheCard.vue'
 
 const pizzaStore = usePizzaStore()
+pizzaStore.fetchFavorites()
 pizzaStore.fetchItems('title', '');
 const items = computed(() => pizzaStore.getItems)
 const favoriteItems = computed(()=> items.value.filter(item => item.isFavorite))
