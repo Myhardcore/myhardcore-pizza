@@ -1,6 +1,8 @@
 import { defineStore } from 'pinia'
 import { usePizzaStore } from '@/store/PizzaStore.js'
-import axios from 'axios'
+
+import { collection, addDoc } from 'firebase/firestore'
+import { db } from '@/firebase/index.js'
 
 export const useCartStore = defineStore('cart', {
     state: () => ({
@@ -10,6 +12,7 @@ export const useCartStore = defineStore('cart', {
     }),
     
     actions: {
+        
         toggleCart() {
             this.cartIsOpened = !this.cartIsOpened
         },
@@ -49,32 +52,28 @@ export const useCartStore = defineStore('cart', {
             this.calculateTotalPrice()
         },
         
-        createOrder() {
-            try {
-                axios.post('https://803aa6e687528694.mokky.dev/orders', {
-                    items: this.cartItems,
-                    totalPrice: this.cartTotalPrice
-                }).then(() => {
-                    this.cartItems = []
-                    this.cartTotalPrice = 0
-                    this.cartIsOpened = false
-                    usePizzaStore().fetchItems('title', '')
-                    localStorage.setItem('cart', JSON.stringify([]))
-                })
-            } catch (err) {
-                console.log(err)
-            }
+        async createOrder() {
+            await addDoc(collection(db, 'orders'), {
+                items: this.cartItems,
+                totalPrice: this.cartTotalPrice
+            }).then(
+                  () => {
+                      this.cartItems = []
+                      this.cartTotalPrice = 0
+                      this.cartIsOpened = false
+                      usePizzaStore().fetchItems()
+                      localStorage.setItem('cart', JSON.stringify([]))
+                  }
+            )
         },
         
         fetchCartItems() {
-            
             if (!this.cartItems) {
                 this.cartItems = []
             } else {
                 this.cartItems = JSON.parse(localStorage.getItem('cart'))
                 this.calculateTotalPrice()
             }
-            
         }
     },
     

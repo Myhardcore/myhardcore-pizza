@@ -6,12 +6,10 @@ import { useCartStore } from '@/store/CartStore.js'
 
 const pizzaStore = usePizzaStore()
 const cartStore = useCartStore()
-
 pizzaStore.fetchFavorites()
-pizzaStore.fetchItems('title', '')
+pizzaStore.fetchItems()
 useCartStore().fetchCartItems()
 const items = computed(() => pizzaStore.getItems)
-
 
 </script>
 
@@ -27,8 +25,6 @@ const items = computed(() => pizzaStore.getItems)
 				 :title="item.title.toUpperCase()"
 				 @addToCart="cartStore.addToCart(item)"
 				 @addToFavorite="pizzaStore.addToFavorites(item)" />
-		
-		
 	</div>
 </template>
 

@@ -1,7 +1,7 @@
 <script setup>
 
 import { usePizzaStore } from '@/store/PizzaStore.js'
-import { reactive } from 'vue'
+import {  reactive } from 'vue'
 
 const store = usePizzaStore()
 
@@ -11,13 +11,12 @@ const filters = reactive({
 })
 
 function sortByPrice() {
-	store.fetchItems(filters.sortBy, filters.searchInput)
+	store.sortByPrice(filters.sortBy, filters.searchInput)
 }
 
 function filterItems() {
-	store.fetchItems(filters.sortBy, filters.searchInput)
+	store.filterItems(filters.searchInput)
 }
-
 </script>
 
 <template>
@@ -29,9 +28,9 @@ function filterItems() {
 			<div class="flex gap-4">
 				
 				<select v-model="filters.sortBy" class="py-2 px-3 border rounded-md outline-none border-pinky-pink focus:border-dashed" @change="sortByPrice">
-					<option value="title">All</option>
-					<option value="price">Cheapest</option>
-					<option value="-price">Expensive</option>
+					<option value="title">By name</option>
+					<option value="asc">Cheap first</option>
+					<option value="desc">Expensive first</option>
 				</select>
 
 				<div class="relative">
@@ -41,7 +40,7 @@ function filterItems() {
 						  class="border rounded-md py-2 pl-12 pr-4 outline-none focus:border-dashed border-pinky-pink"
 						  placeholder="search..."
 						  type="text"
-						  @keyup="filterItems" />
+						  @input="filterItems" />
 				</div>
 			</div>
 		</div>
@@ -51,3 +50,4 @@ function filterItems() {
 <style scoped>
 
 </style>
+

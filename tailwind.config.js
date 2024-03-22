@@ -6,7 +6,7 @@ export default {
     
     content: [
         './index.html',
-        './src/**/*.{vue, js,ts,jsx,tsx}'
+        './src/**/*.{vue,js,ts,jsx,tsx}'
     ],
     theme: {
         extend: {
@@ -14,7 +14,7 @@ export default {
             'pinky-pink': '#DA1D3A',
             'pinky-dark': '#C91F37',
             'blacky-black': '#252D25',
-            'lovely-gray': '#CED6DE'
+            'lovely-gray': '#CED6DE',
           },
         },
     },

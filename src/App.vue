@@ -3,7 +3,12 @@
 import TheHeader from './components/UI/TheHeader.vue'
 import Drawer from '@/components/Drawer.vue'
 import { useCartStore } from '@/store/CartStore.js'
+import { useAuthStore } from '@/store/AuthStore.js'
+import { onMounted } from 'vue'
 
+onMounted(()=>{
+	useAuthStore().init()
+})
 </script>
 
 <template>
@@ -23,6 +28,5 @@ import { useCartStore } from '@/store/CartStore.js'
 
 </template>
 
-<style scoped>
-
+<style>
 </style>
