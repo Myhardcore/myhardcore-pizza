@@ -5,10 +5,8 @@ import Drawer from '@/components/Drawer.vue'
 import { useCartStore } from '@/store/CartStore.js'
 import { useAuthStore } from '@/store/AuthStore.js'
 import { onMounted } from 'vue'
+import { usePizzaStore } from '@/store/PizzaStore.js'
 
-onMounted(()=>{
-	useAuthStore().init()
-})
 </script>
 
 <template>

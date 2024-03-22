@@ -1,28 +1,35 @@
 import { defineStore } from 'pinia'
-import { createUserWithEmailAndPassword, signOut, signInWithEmailAndPassword, onAuthStateChanged  } from 'firebase/auth'
+import { createUserWithEmailAndPassword, signOut, signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth'
 
 import { auth } from '@/firebase/index.js'
-
+import { usePizzaStore } from '@/store/PizzaStore.js'
 
 export const useAuthStore = defineStore('auth', {
     state: () => {
         return {
-        user: {}
+            user: {}
         }
     },
     actions: {
         
-        init(){
+        init() {
+            const pizzaStore = usePizzaStore()
             onAuthStateChanged(auth, (user) => {
+                
                 if (user) {
                     this.user.id = user.uid
                     this.user.email = user.email
+                    pizzaStore.init()
                     this.router.push('/home')
+                    console.log('user detected', this.user.id)
                 } else {
                     this.user = {}
-                    this.router.replace('/auth')
+                    usePizzaStore().fetchItems()
+                    usePizzaStore().clearFavorites()
+                    console.log('No user')
+                    // this.router.replace('/home')
                 }
-            });
+            })
         },
         
         registerUser(email, password) {

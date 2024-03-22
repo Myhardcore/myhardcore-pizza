@@ -1,25 +1,32 @@
 import { defineStore } from 'pinia'
 import { useCartStore } from '@/store/CartStore.js'
+import { useAuthStore } from '@/store/AuthStore.js'
 
 import { collection, query, onSnapshot, addDoc, deleteDoc, doc } from 'firebase/firestore'
 import { db } from '@/firebase/index.js'
-
+let favCollection
 export const usePizzaStore = defineStore('pizzas', {
     
     state: () => ({
         items: [],
         favorites: [],
-        filteredItems: []
+        filteredItems: [],
+        
     }),
     
     actions: {
+        init() {
+            favCollection = collection(db, 'users', useAuthStore().user.id , 'favorites');
+            
+            this.fetchFavorites()
+            this.fetchItems()
+        },
         fetchItems() {
             const q = query(collection(db, 'items'))
             
             onSnapshot(q, (querySnapshot) => {
                 this.items = []
                 querySnapshot.forEach((doc) => {
-                    // console.log(doc.id, " => ", doc.data().im);
                     const item = {
                         id: doc.id,
                         ...doc.data(),
@@ -31,7 +38,6 @@ export const usePizzaStore = defineStore('pizzas', {
                 })
                 //запомним сердечки при загрузке
                 this.items.forEach((item) => {
-                    // noinspection JSUnresolvedVariable
                     if (this.favorites.some(el => el.parentId === item.id)) {
                         item.isFavorite = true
                     }
@@ -45,19 +51,25 @@ export const usePizzaStore = defineStore('pizzas', {
             })
         },
         fetchFavorites() {
-            const q = query(collection(db, 'favorites'))
-            
-            onSnapshot(q, (querySnapshot) => {
+            if (!useAuthStore().user.id) {
+                return
+            }
+            onSnapshot(query(favCollection), (querySnapshot) => {
                 this.favorites = []
                 querySnapshot.forEach((doc) => {
-                    // console.log(doc.id, " => ", doc.data().im);
                     const fav = {
                         id: doc.id,
                         parentId: doc.data().parentId
                     }
                     this.favorites.push(fav)
-                    // console.log(fbItems.value)
                 })
+            })
+        },
+        
+        clearFavorites() {
+            this.favorites = []
+            this.items.forEach(item => {
+                item.isFavorite = false
             })
         },
         
@@ -65,12 +77,12 @@ export const usePizzaStore = defineStore('pizzas', {
             if (!item.isFavorite) {
                 item.isFavorite = true
                 
-                await addDoc(collection(db, 'favorites'), {
+                await addDoc(favCollection, {
                     parentId: item.id
                 })
             } else {
                 item.isFavorite = false
-                const docRef = doc(db, 'favorites', this.favorites.find(el => el.parentId === item.id).id)
+                const docRef = doc(db, 'users', useAuthStore().user.id , 'favorites', this.favorites.find(el => el.parentId === item.id).id)
                 await deleteDoc(docRef)
             }
         },

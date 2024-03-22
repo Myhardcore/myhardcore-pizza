@@ -12,14 +12,14 @@ const router = createRouter({
             redirect: '/home'
         },
         {
-            path: '/auth',
-            name: 'auth',
-            component: LoginFrom
-        },
-        {
             path: '/home',
             name: 'home',
             component: HomePage
+        },
+        {
+            path: '/auth',
+            name: 'auth',
+            component: LoginFrom
         },
         {
             path: '/favorites',

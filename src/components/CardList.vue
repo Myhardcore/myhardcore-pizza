@@ -1,15 +1,19 @@
 <script setup>
 import TheCard from '@/components/UI/TheCard.vue'
 import { usePizzaStore } from '@/store/PizzaStore'
-import { computed } from 'vue'
+import { computed, onMounted } from 'vue'
 import { useCartStore } from '@/store/CartStore.js'
+import { useAuthStore } from '@/store/AuthStore.js'
 
 const pizzaStore = usePizzaStore()
 const cartStore = useCartStore()
-pizzaStore.fetchFavorites()
-pizzaStore.fetchItems()
-useCartStore().fetchCartItems()
+cartStore.fetchCartItems()
+onMounted(()=>{
+	useAuthStore().init()
+})
+
 const items = computed(() => pizzaStore.getItems)
+console.log(items.value)
 
 </script>
 
