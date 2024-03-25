@@ -7,25 +7,25 @@ import { usePizzaStore } from '@/store/PizzaStore.js'
 export const useAuthStore = defineStore('auth', {
     state: () => {
         return {
-            user: {}
+            user: {},
+            userIsLoaded: false
         }
     },
     actions: {
         
         init() {
-            const pizzaStore = usePizzaStore()
             onAuthStateChanged(auth, (user) => {
                 
                 if (user) {
+                    
                     this.user.id = user.uid
                     this.user.email = user.email
-                    pizzaStore.init()
+                    usePizzaStore().init()
                     this.router.push('/home')
-                    console.log('user detected', this.user.id)
                 } else {
                     this.user = {}
-                    usePizzaStore().fetchItems()
                     usePizzaStore().clearFavorites()
+                    usePizzaStore().fetchItems()
                     console.log('No user')
                     // this.router.replace('/home')
                 }

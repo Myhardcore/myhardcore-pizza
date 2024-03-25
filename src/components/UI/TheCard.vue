@@ -1,5 +1,7 @@
 <script setup>
-defineEmits(['addToFavorite', 'addToCart']);
+import { usePizzaStore } from '@/store/PizzaStore.js'
+
+defineEmits(['addToFavorite', 'addToCart', 'quickView']);
 defineProps({
 	title: String,
 	price: Number,
@@ -12,7 +14,7 @@ defineProps({
 </script>
 
 <template>
-	<div>
+	<div @click="$emit('quickView')">
 		<div class=" relative bg-white border border-pinky-pink rounded-3xl p-8 cursor-pointer hover:-translate-y-2 hover:shadow-xl transition ">
 			<img :src="isFavorite ? '/like-2.svg' : '/like-1.svg'" alt="like 2"
 				 class="absolute top-8 left-8" @click="$emit('addToFavorite')">

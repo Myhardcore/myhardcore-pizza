@@ -1,4 +1,5 @@
 import { createRouter,createWebHistory } from 'vue-router'
+import { useAuthStore } from '@/store/AuthStore.js'
 import Favorites from '@/pages/Favorites.vue'
 import HomePage from '@/pages/HomePage.vue'
 import NotFound from '@/pages/NotFound.vue'
@@ -32,5 +33,17 @@ const router = createRouter({
             component: NotFound
         },
     ]
+})
+
+// NAV GUARDS
+
+router.beforeEach(async (to, from) => {
+    
+    if (to.name === 'auth' && useAuthStore().user.id) {
+        return false
+    }
+    if(to.name === 'favorites' && !useAuthStore().user.id) {
+        return { name: 'auth' }
+    }
 })
 export default router

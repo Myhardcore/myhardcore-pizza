@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { usePizzaStore } from '@/store/PizzaStore.js'
+import { useAuthStore } from '@/store/AuthStore.js'
 
 import { collection, addDoc } from 'firebase/firestore'
 import { db } from '@/firebase/index.js'
@@ -53,7 +54,7 @@ export const useCartStore = defineStore('cart', {
         },
         
         async createOrder() {
-            await addDoc(collection(db, 'orders'), {
+            await addDoc(collection(db, 'users', useAuthStore().user.id, 'orders'), {
                 items: this.cartItems,
                 totalPrice: this.cartTotalPrice
             }).then(

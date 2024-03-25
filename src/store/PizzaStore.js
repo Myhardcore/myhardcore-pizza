@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { useCartStore } from '@/store/CartStore.js'
 import { useAuthStore } from '@/store/AuthStore.js'
 
-import { collection, query, onSnapshot, addDoc, deleteDoc, doc } from 'firebase/firestore'
+import { collection, query, onSnapshot, addDoc, deleteDoc, doc, getDocs } from 'firebase/firestore'
 import { db } from '@/firebase/index.js'
 let favCollection
 export const usePizzaStore = defineStore('pizzas', {
@@ -11,59 +11,101 @@ export const usePizzaStore = defineStore('pizzas', {
         items: [],
         favorites: [],
         filteredItems: [],
+        openQuickView: false,
+        quickViewItem: null
         
     }),
     
     actions: {
         init() {
             favCollection = collection(db, 'users', useAuthStore().user.id , 'favorites');
-            
             this.fetchFavorites()
             this.fetchItems()
+            useAuthStore().userIsLoaded = true
+            console.log(useAuthStore().userIsLoaded)
         },
-        fetchItems() {
-            const q = query(collection(db, 'items'))
-            
-            onSnapshot(q, (querySnapshot) => {
-                this.items = []
-                querySnapshot.forEach((doc) => {
-                    const item = {
-                        id: doc.id,
-                        ...doc.data(),
-                        isFavorite: false,
-                        itemIsAdded: false
-                    }
-                    this.items.push(item)
-                    this.filteredItems = this.items
-                })
-                //запомним сердечки при загрузке
-                this.items.forEach((item) => {
-                    if (this.favorites.some(el => el.parentId === item.id)) {
-                        item.isFavorite = true
-                    }
-                })
-                //запомним добавленные к корзину, при использовании фильтра
-                this.items.forEach(item => {
-                    if (useCartStore().getCartItems.some(el => el.id === item.id)) {
-                        item.itemIsAdded = true
-                    }
-                })
+        
+        async fetchItems() {
+            const querySnapshot = await getDocs(collection(db, 'items'))
+            this.items = []
+            querySnapshot.forEach((doc) => {
+                const item = {
+                    id: doc.id,
+                    ...doc.data(),
+                    isFavorite: false,
+                    itemIsAdded: false
+                }
+                this.items.push(item)
+                this.filteredItems = this.items
             })
+            
+            //запомним сердечки при загрузке
+            this.items.forEach((item) => {
+                if (this.favorites.some(el => el.parentId === item.id)) {
+                    item.isFavorite = true
+                }
+            })
+            //запомним добавленные к корзину, при использовании фильтра
+            this.items.forEach(item => {
+                if (useCartStore().getCartItems.some(el => el.id === item.id)) {
+                    item.itemIsAdded = true
+                }
+            })
+            
+            // const q = query(collection(db, 'items'))
+            
+            // onSnapshot(q, (querySnapshot) => {
+            //     this.items = []
+            //     querySnapshot.forEach((doc) => {
+            //         const item = {
+            //             id: doc.id,
+            //             ...doc.data(),
+            //             isFavorite: false,
+            //             itemIsAdded: false
+            //         }
+            //         this.items.push(item)
+            //         this.filteredItems = this.items
+            //     })
+            //     //запомним сердечки при загрузке
+            //     this.items.forEach((item) => {
+            //         if (this.favorites.some(el => el.parentId === item.id)) {
+            //             item.isFavorite = true
+            //         }
+            //     })
+            //     //запомним добавленные к корзину, при использовании фильтра
+            //     this.items.forEach(item => {
+            //         if (useCartStore().getCartItems.some(el => el.id === item.id)) {
+            //             item.itemIsAdded = true
+            //         }
+            //     })
+            // })
         },
-        fetchFavorites() {
+        async fetchFavorites() {
+            
             if (!useAuthStore().user.id) {
                 return
             }
-            onSnapshot(query(favCollection), (querySnapshot) => {
-                this.favorites = []
-                querySnapshot.forEach((doc) => {
-                    const fav = {
-                        id: doc.id,
-                        parentId: doc.data().parentId
-                    }
-                    this.favorites.push(fav)
-                })
+            
+            const querySnapshot = await getDocs(favCollection)
+            this.favorites = []
+            querySnapshot.forEach((doc) => {
+                const fav = {
+                    id: doc.id,
+                    parentId: doc.data().parentId
+                }
+                this.favorites.push(fav)
             })
+            
+            // onSnapshot(query(favCollection), (querySnapshot) => {
+            //     this.favorites = []
+            //     querySnapshot.forEach((doc) => {
+            //         const fav = {
+            //             id: doc.id,
+            //             parentId: doc.data().parentId
+            //         }
+            //         this.favorites.push(fav)
+            //     })
+            // })
         },
         
         clearFavorites() {
@@ -115,13 +157,23 @@ export const usePizzaStore = defineStore('pizzas', {
             } else {
                 this.filteredItems = this.items
             }
-        }
+        },
+        quickView(item) {
+            this.openQuickView = true
+            this.quickViewItem = item
+        },
         
     },
+    
+    
     
     getters: {
         getItems(state) {
             return state.filteredItems
+        },
+        
+        getQuickViewItem(state) {
+            return state.quickViewItem
         }
     }
 })

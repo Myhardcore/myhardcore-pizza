@@ -67,7 +67,7 @@ function switchMode(newMode) {
 	
 <!--	form -->
 	<div class=" flex items-center justify-center w-full dark:bg-gray-950">
-		<div class="bg-white dark:bg-gray-900 shadow-md rounded-lg px-8 py-6 max-w-md border border-pinky-pink">
+		<div class="bg-white dark:bg-gray-900 shadow-md rounded-lg px-8 py-6 max-w-md border border-pinky-pink mb-48">
 			<h1 class="text-2xl font-bold text-center mb-4 dark:text-gray-200"> {{ formCaption }}</h1>
 			
 			<form @submit.prevent="submitForm">

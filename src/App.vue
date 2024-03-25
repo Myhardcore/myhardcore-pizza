@@ -5,7 +5,12 @@ import Drawer from '@/components/Drawer.vue'
 import { useCartStore } from '@/store/CartStore.js'
 import { useAuthStore } from '@/store/AuthStore.js'
 import { onMounted } from 'vue'
+import ItemQuickview from '@/components/UI/ItemQuickview.vue'
 import { usePizzaStore } from '@/store/PizzaStore.js'
+
+onMounted( ()=>{
+	useAuthStore().init()
+})
 
 </script>
 
@@ -18,7 +23,9 @@ import { usePizzaStore } from '@/store/PizzaStore.js'
 	<Drawer v-if="useCartStore().getCartIsOpened" />
 	
 	
-	<div class="bg-white w-4/5 m-auto rounded-xl shadow-3xl relative mb-10 border border-pinky-pink mt-10">
+	
+	<div class="bg-white w-4/5 m-auto rounded-xl shadow-3xl relative mb-10 border border-pinky-pink mt-10 min-h-screen">
+		<ItemQuickview v-if="usePizzaStore().getQuickViewItem"></ItemQuickview>
 		<TheHeader />
 		<router-view></router-view>
 	

@@ -2,6 +2,7 @@
 import plugin from 'tailwindcss/plugin'
 
 
+
 export default {
     
     content: [
@@ -21,7 +22,8 @@ export default {
     plugins: [
         plugin(function({ addVariant }) {
             addVariant('active', ['&:active', '&.router-link-active'])
-        })
+        }),
+       
     ]
 }
 

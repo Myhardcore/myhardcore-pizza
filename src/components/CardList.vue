@@ -1,19 +1,15 @@
 <script setup>
 import TheCard from '@/components/UI/TheCard.vue'
 import { usePizzaStore } from '@/store/PizzaStore'
-import { computed, onMounted } from 'vue'
+import { computed } from 'vue'
 import { useCartStore } from '@/store/CartStore.js'
-import { useAuthStore } from '@/store/AuthStore.js'
 
 const pizzaStore = usePizzaStore()
 const cartStore = useCartStore()
 cartStore.fetchCartItems()
-onMounted(()=>{
-	useAuthStore().init()
-})
 
 const items = computed(() => pizzaStore.getItems)
-console.log(items.value)
+
 
 </script>
 
@@ -28,8 +24,14 @@ console.log(items.value)
 				 :price="item.price"
 				 :title="item.title.toUpperCase()"
 				 @addToCart="cartStore.addToCart(item)"
-				 @addToFavorite="pizzaStore.addToFavorites(item)" />
+				 @addToFavorite="pizzaStore.addToFavorites(item)"
+				 @quick-view="pizzaStore.quickView(item)" />
+		
+		<div v-if="items.length === 0" class="font-semibold text-blacky-black">No such pitsa, bruuh. Try another
+			search...
+		</div>
 	</div>
+
 </template>
 
 <style scoped>
