@@ -3,6 +3,7 @@ import TheCard from '@/components/UI/TheCard.vue'
 import { usePizzaStore } from '@/store/PizzaStore'
 import { computed } from 'vue'
 import { useCartStore } from '@/store/CartStore.js'
+import { useAuthStore } from '@/store/AuthStore.js'
 
 const pizzaStore = usePizzaStore()
 const cartStore = useCartStore()
@@ -27,9 +28,10 @@ const items = computed(() => pizzaStore.getItems)
 				 @addToFavorite="pizzaStore.addToFavorites(item)"
 				 @quick-view="pizzaStore.quickView(item)" />
 		
-		<div v-if="items.length === 0" class="font-semibold text-blacky-black">No such pitsa, bruuh. Try another
+		<div v-if="items.length === 0 && usePizzaStore().itemsLoaded" class="font-semibold text-blacky-black">No such pitsa, bruuh. Try another
 			search...
 		</div>
+		
 	</div>
 
 </template>

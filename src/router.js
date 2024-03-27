@@ -4,6 +4,7 @@ import Favorites from '@/pages/Favorites.vue'
 import HomePage from '@/pages/HomePage.vue'
 import NotFound from '@/pages/NotFound.vue'
 import LoginFrom from '@/pages/LoginFrom.vue'
+import ProfilePage from '@/pages/ProfilePage.vue'
 
 const router = createRouter({
     history: createWebHistory(),
@@ -28,6 +29,11 @@ const router = createRouter({
             component: Favorites
         },
         {
+            path: '/profile',
+            name: 'profile',
+            component: ProfilePage
+        },
+        {
             path: '/:notFound(.*)',
             name: 'notFound',
             component: NotFound
@@ -43,6 +49,9 @@ router.beforeEach(async (to, from) => {
         return false
     }
     if(to.name === 'favorites' && !useAuthStore().user.id) {
+        return { name: 'auth' }
+    }
+    if(to.name === 'profile' && !useAuthStore().user.id) {
         return { name: 'auth' }
     }
 })

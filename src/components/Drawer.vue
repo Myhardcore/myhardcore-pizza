@@ -7,6 +7,7 @@ import { computed } from 'vue'
 
 function closeCart() {
 	useCartStore().toggleCart()
+	useCartStore().orderCreated = false
 	document.body.classList.toggle('overflow-y-hidden') // TODO Костыли???
 }
 
@@ -18,18 +19,27 @@ const cartTax = computed(() => Math.round((useCartStore().getCartTotalPrice * 0.
 <template>
 	<!-- Обертка + верхушка корзины-->
 	<div class="fixed top-0 left-0 h-full w-full bg-pinky-pink z-20 opacity-40 " @click="closeCart"></div>
-	<div class="bg-white w-1/4 fixed right-0 top-0 bottom-0 z-20 p-8 border-l border-pinky-pink overflow-y-scroll">
+	<div class="bg-white w-1/4 fixed right-0 top-0 bottom-0 z-20 p-8 border-l border-pinky-pink overflow-y-scroll" >
 		<h2 class="text-2xl font-bold mb-8 text-pinky-pink">Cart</h2>
 		<!-- Рендер итемов в корзине-->
 		<CartItemList v-auto-animate />
 		
 		
 		<!-- Детали корзины-->
-		<div v-if="useCartStore().getCartItems.length === 0"
+		<div v-if="useCartStore().getCartItems.length === 0 && !useCartStore().orderCreated"
 			 class="flex flex-col justify-center gap-4 items-center h-full">
 			<img alt="empty cart" class="max-w-56" src="/empty-cart.png">
 			<p class="font-bold text-pinky-pink text-2xl">Your cart is empty</p>
 			<p class=" text-blacky-black ">Please add at least one pitsa to create new order</p>
+		</div>
+		<div v-else-if="useCartStore().orderCreated"
+			 class="flex flex-col justify-center gap-4 items-center h-full">
+			<img alt="order success" class="max-w-56" src="/order-success.png">
+			<p class="font-bold text-pinky-pink text-2xl">Thank you for your order!</p>
+			<p class=" text-blacky-black ">
+				You can go to your
+				<router-link to="/profile" class="bg-pinky-pink p-1 rounded text-white" @click="closeCart">Profile</router-link>
+				to check your recent orders. </p>
 		</div>
 		<div v-else class="flex flex-col gap-4 my-7 ">
 			<div class="flex gap-2">

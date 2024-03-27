@@ -2,14 +2,16 @@ import { defineStore } from 'pinia'
 import { usePizzaStore } from '@/store/PizzaStore.js'
 import { useAuthStore } from '@/store/AuthStore.js'
 
-import { collection, addDoc } from 'firebase/firestore'
+import { collection, addDoc, getDocs } from 'firebase/firestore'
 import { db } from '@/firebase/index.js'
 
 export const useCartStore = defineStore('cart', {
     state: () => ({
         cartItems: [],
         cartIsOpened: false,
-        cartTotalPrice: 0
+        cartTotalPrice: 0,
+        orderItems: [],
+        orderCreated: false
     }),
     
     actions: {
@@ -54,18 +56,37 @@ export const useCartStore = defineStore('cart', {
         },
         
         async createOrder() {
-            await addDoc(collection(db, 'users', useAuthStore().user.id, 'orders'), {
-                items: this.cartItems,
-                totalPrice: this.cartTotalPrice
-            }).then(
-                  () => {
-                      this.cartItems = []
-                      this.cartTotalPrice = 0
-                      this.cartIsOpened = false
-                      usePizzaStore().fetchItems()
-                      localStorage.setItem('cart', JSON.stringify([]))
-                  }
-            )
+            
+            if(useAuthStore().user.id){
+                await addDoc(collection(db, 'users', useAuthStore().user.id, 'orders'), {
+                    items: this.cartItems,
+                    totalPrice: this.cartTotalPrice,
+                    date: new Date()
+                }).then(
+                      () => {
+                          this.cartItems = []
+                          this.cartTotalPrice = 0
+                          this.orderCreated = true
+                          usePizzaStore().fetchItems()
+                          localStorage.setItem('cart', JSON.stringify([]))
+                      }
+                )
+            } else {
+                this.cartIsOpened = false
+                await this.router.push('/auth');
+            }
+            
+        },
+        
+        async fetchOrders(){
+            const querySnapshot = await getDocs(collection(db,'users', useAuthStore().user.id, 'orders'))
+            this.orderItems = []
+            querySnapshot.forEach((doc) => {
+                const item = {
+                    ...doc.data(),
+                }
+                this.orderItems.push(item)
+            })
         },
         
         fetchCartItems() {
@@ -90,6 +111,9 @@ export const useCartStore = defineStore('cart', {
         },
         getItemCountValue() {
             return usePizzaStore().getItems.count
+        },
+        getOrderItems(state) {
+            return state.orderItems
         }
     }
 })

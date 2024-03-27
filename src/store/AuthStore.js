@@ -26,8 +26,7 @@ export const useAuthStore = defineStore('auth', {
                     this.user = {}
                     usePizzaStore().clearFavorites()
                     usePizzaStore().fetchItems()
-                    console.log('No user')
-                    // this.router.replace('/home')
+                    this.router.push('/home')
                 }
             })
         },

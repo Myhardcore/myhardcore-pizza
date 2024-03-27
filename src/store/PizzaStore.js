@@ -2,8 +2,9 @@ import { defineStore } from 'pinia'
 import { useCartStore } from '@/store/CartStore.js'
 import { useAuthStore } from '@/store/AuthStore.js'
 
-import { collection, query, onSnapshot, addDoc, deleteDoc, doc, getDocs } from 'firebase/firestore'
+import { collection, addDoc, deleteDoc, doc, getDocs } from 'firebase/firestore'
 import { db } from '@/firebase/index.js'
+
 let favCollection
 export const usePizzaStore = defineStore('pizzas', {
     
@@ -12,13 +13,14 @@ export const usePizzaStore = defineStore('pizzas', {
         favorites: [],
         filteredItems: [],
         openQuickView: false,
-        quickViewItem: null
+        quickViewItem: null,
+        itemsLoaded: false
         
     }),
     
     actions: {
         init() {
-            favCollection = collection(db, 'users', useAuthStore().user.id , 'favorites');
+            favCollection = collection(db, 'users', useAuthStore().user.id, 'favorites')
             this.fetchFavorites()
             this.fetchItems()
             useAuthStore().userIsLoaded = true
@@ -52,33 +54,8 @@ export const usePizzaStore = defineStore('pizzas', {
                 }
             })
             
-            // const q = query(collection(db, 'items'))
+            this.itemsLoaded = true
             
-            // onSnapshot(q, (querySnapshot) => {
-            //     this.items = []
-            //     querySnapshot.forEach((doc) => {
-            //         const item = {
-            //             id: doc.id,
-            //             ...doc.data(),
-            //             isFavorite: false,
-            //             itemIsAdded: false
-            //         }
-            //         this.items.push(item)
-            //         this.filteredItems = this.items
-            //     })
-            //     //запомним сердечки при загрузке
-            //     this.items.forEach((item) => {
-            //         if (this.favorites.some(el => el.parentId === item.id)) {
-            //             item.isFavorite = true
-            //         }
-            //     })
-            //     //запомним добавленные к корзину, при использовании фильтра
-            //     this.items.forEach(item => {
-            //         if (useCartStore().getCartItems.some(el => el.id === item.id)) {
-            //             item.itemIsAdded = true
-            //         }
-            //     })
-            // })
         },
         async fetchFavorites() {
             
@@ -95,17 +72,6 @@ export const usePizzaStore = defineStore('pizzas', {
                 }
                 this.favorites.push(fav)
             })
-            
-            // onSnapshot(query(favCollection), (querySnapshot) => {
-            //     this.favorites = []
-            //     querySnapshot.forEach((doc) => {
-            //         const fav = {
-            //             id: doc.id,
-            //             parentId: doc.data().parentId
-            //         }
-            //         this.favorites.push(fav)
-            //     })
-            // })
         },
         
         clearFavorites() {
@@ -124,7 +90,7 @@ export const usePizzaStore = defineStore('pizzas', {
                 })
             } else {
                 item.isFavorite = false
-                const docRef = doc(db, 'users', useAuthStore().user.id , 'favorites', this.favorites.find(el => el.parentId === item.id).id)
+                const docRef = doc(db, 'users', useAuthStore().user.id, 'favorites', this.favorites.find(el => el.parentId === item.id).id)
                 await deleteDoc(docRef)
             }
         },
@@ -142,8 +108,8 @@ export const usePizzaStore = defineStore('pizzas', {
             if (searchInput) {
                 this.filterItems(searchInput)
             }
-            if (sortBy === 'asc'){
-                this.filteredItems.sort((a, b) => a.price - b.price);
+            if (sortBy === 'asc') {
+                this.filteredItems.sort((a, b) => a.price - b.price)
             } else if (sortBy === 'desc') {
                 this.filteredItems.sort((a, b) => b.price - a.price)
             } else if (sortBy === 'title') {
@@ -161,10 +127,9 @@ export const usePizzaStore = defineStore('pizzas', {
         quickView(item) {
             this.openQuickView = true
             this.quickViewItem = item
-        },
+        }
         
     },
-    
     
     
     getters: {

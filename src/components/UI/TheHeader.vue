@@ -40,7 +40,7 @@ window.addEventListener('scroll', function() {
 				<li class="flex items-center gap-2 cursor-pointer text-blacky-black hover:text-pinky-pink">
 					<img alt="favorites" class="w-6 " src="/heart.png ">
 					<router-link class="active:text-pinky-pink active:underline underline-offset-8" to="/favorites">
-						Favorite
+						Favorites
 					</router-link>
 				</li>
 				<li class="flex items-center gap-2 cursor-pointer text-blacky-black hover:text-pinky-pink"
@@ -51,7 +51,7 @@ window.addEventListener('scroll', function() {
 				<li v-if="useAuthStore().user.email"
 					class="flex items-center gap-2 cursor-pointer text-blacky-black hover:text-pinky-pink ">
 					<img alt="profile" class="w-6 " src="/profile.png">
-					<span>{{ useAuthStore().user.email }}</span>
+					<router-link to="/profile">{{ useAuthStore().user.email }}</router-link>
 				</li>
 				<li v-if="!useAuthStore().user.email"
 					class="flex items-center gap-2 cursor-pointer text-blacky-black hover:bg-pinky-pink/30 border border-pinky-pink rounded p-2 ">
