@@ -15,8 +15,20 @@ export default {
             'pinky-pink': '#DA1D3A',
             'pinky-dark': '#C91F37',
             'blacky-black': '#252D25',
-            'lovely-gray': '#CED6DE',
+            'lovely-gray': '#FBF6EF',
           },
+            cursor: {
+                'fancy': 'url(/cursor.svg), pointer',
+            },
+            keyframes: {
+              'slide': {
+                '0%': { transform: 'translateX(0%)' },
+                '100%': { transform: 'translateX(-100%)' },
+              }
+            },
+            animation: {
+              'slide': 'slide 35s infinite linear',
+            }
         },
     },
     plugins: [

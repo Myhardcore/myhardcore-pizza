@@ -3,7 +3,7 @@
 import CartItemList from '@/components/UI/CartItemList.vue'
 import { useCartStore } from '@/store/CartStore.js'
 
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 
 function closeCart() {
 	useCartStore().toggleCart()
@@ -14,12 +14,13 @@ function closeCart() {
 const totalPrice = computed(() => useCartStore().getCartTotalPrice)
 const cartTax = computed(() => Math.round((useCartStore().getCartTotalPrice * 0.2) * 100) / 100)
 
+
 </script>
 
 <template>
 	<!-- Обертка + верхушка корзины-->
 	<div class="fixed top-0 left-0 h-full w-full bg-pinky-pink z-20 opacity-40 " @click="closeCart"></div>
-	<div class="bg-white w-1/4 fixed right-0 top-0 bottom-0 z-20 p-8 border-l border-pinky-pink overflow-y-scroll" >
+	<div class="bg-white w-1/4 fixed right-0 top-0 bottom-0 z-20 p-8 border-l border-pinky-pink overflow-y-scroll">
 		<h2 class="text-2xl font-bold mb-8 text-pinky-pink">Cart</h2>
 		<!-- Рендер итемов в корзине-->
 		<CartItemList v-auto-animate />
@@ -38,8 +39,10 @@ const cartTax = computed(() => Math.round((useCartStore().getCartTotalPrice * 0.
 			<p class="font-bold text-pinky-pink text-2xl">Thank you for your order!</p>
 			<p class=" text-blacky-black ">
 				You can go to your
-				<router-link to="/profile" class="bg-pinky-pink p-1 rounded text-white" @click="closeCart">Profile</router-link>
-				to check your recent orders. </p>
+				<router-link class="bg-pinky-pink p-1 rounded text-white" to="/profile" @click="closeCart">Profile
+				</router-link>
+				to check your recent orders.
+			</p>
 		</div>
 		<div v-else class="flex flex-col gap-4 my-7 ">
 			<div class="flex gap-2">
@@ -56,10 +59,18 @@ const cartTax = computed(() => Math.round((useCartStore().getCartTotalPrice * 0.
 			
 			<button :disabled="totalPrice === 0" class="mt-5 bg-pinky-pink w-full rounded-xl py-3 hover:bg-green-600
 					active:bg-green-400 disabled:bg-gray-200 transition cursor-pointer
-					text-gray-50"
-					@click="useCartStore().createOrder()"> Checkout
+					text-gray-50 whitespace-nowrap "
+					@click="useCartStore().createOrder()">
+				<span class="hover:animate-slide inline-block">
+					<span class=""> CheckoutCheckoutCheckoutCheckoutCheckout</span>
+					<span class=""> CheckoutCheckoutCheckoutCheckoutCheckout</span>
+					<span class=""> CheckoutCheckoutCheckoutCheckoutCheckout</span>
+			</span>
 			</button>
-		
+			
+			
+			
+			
 		</div>
 	</div>
 

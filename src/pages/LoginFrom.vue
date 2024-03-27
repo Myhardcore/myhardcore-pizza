@@ -44,7 +44,7 @@ function switchMode(newMode) {
 
 <template>
 <!--	mode switcher -->
-	<div class="max-w-md mx-auto mb-5">
+	<div class="max-w-md mx-auto mb-5 mt-10">
 		<div class="bg-white">
 			<nav class="flex flex-col sm:flex-row justify-center">
 				<button
@@ -56,7 +56,7 @@ function switchMode(newMode) {
 				</button>
 				<button
 					  class=" py-4 px-6 block hover:text-pinky-dark focus:outline-none border-b-2 font-medium"
-					  :class="{ 'text-pinky-pink': mode === 'signup', 'border-pinky-pink': mode === 'signup', 'text-gray-600': mode === 'login' }"
+					  :class="{'text-pinky-pink': mode === 'signup', 'border-pinky-pink': mode === 'signup', 'text-gray-600': mode === 'login' }"
 					  @click="switchMode('signup')"
 				>
 					Sign up

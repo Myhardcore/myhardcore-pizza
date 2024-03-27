@@ -40,7 +40,7 @@ window.addEventListener('scroll', function() {
 				<li class="flex items-center gap-2 cursor-pointer text-blacky-black hover:text-pinky-pink">
 					<img alt="favorites" class="w-6 " src="/heart.png ">
 					<router-link class="active:text-pinky-pink active:underline underline-offset-8" to="/favorites">
-						Favorites
+						Favorite
 					</router-link>
 				</li>
 				<li class="flex items-center gap-2 cursor-pointer text-blacky-black hover:text-pinky-pink"

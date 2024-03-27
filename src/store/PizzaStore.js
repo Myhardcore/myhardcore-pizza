@@ -20,11 +20,12 @@ export const usePizzaStore = defineStore('pizzas', {
     
     actions: {
         init() {
+            useCartStore().cartItems.length === 0 ? localStorage.setItem('cart', JSON.stringify([])) : ''
+            // (localStorage.getItem('cart') === null) ?  localStorage.setItem('cart', JSON.stringify([])) : ''
             favCollection = collection(db, 'users', useAuthStore().user.id, 'favorites')
             this.fetchFavorites()
             this.fetchItems()
             useAuthStore().userIsLoaded = true
-            console.log(useAuthStore().userIsLoaded)
         },
         
         async fetchItems() {

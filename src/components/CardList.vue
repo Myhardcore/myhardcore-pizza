@@ -3,7 +3,6 @@ import TheCard from '@/components/UI/TheCard.vue'
 import { usePizzaStore } from '@/store/PizzaStore'
 import { computed } from 'vue'
 import { useCartStore } from '@/store/CartStore.js'
-import { useAuthStore } from '@/store/AuthStore.js'
 
 const pizzaStore = usePizzaStore()
 const cartStore = useCartStore()

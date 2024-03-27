@@ -10,6 +10,7 @@ import { usePizzaStore } from '@/store/PizzaStore.js'
 
 onMounted( ()=>{
 	useAuthStore().init()
+	localStorage.getItem('cart') === null ? localStorage.setItem('cart', JSON.stringify([])) : ''
 })
 
 </script>
@@ -17,7 +18,7 @@ onMounted( ()=>{
 <template>
 	
 	
-	<div class="fixed top-[50%] left-[50%]  translate-x-[-50%] translate-y-[-50%] w-full h-full bg-lovely-gray" id="background">
+	<div class="fixed bg-repeat top-[50%] left-[50%]  translate-x-[-50%] translate-y-[-50%] w-full h-full bg-lovely-gray" style="background-image: url(/bg-text.svg) " >
 	</div>
 	
 	<Drawer v-if="useCartStore().getCartIsOpened" />

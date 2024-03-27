@@ -5,6 +5,7 @@ import FilterAndSearch from '@/components/FilterAndSearch.vue'
 import TheSwiper from '@/components/UI/TheSwiper.vue'
 import ProgressBar from '@/components/UI/ProgressBar.vue'
 import { usePizzaStore } from '@/store/PizzaStore.js'
+import FooterPage from '@/App.vue'
 
 
 </script>
@@ -14,6 +15,8 @@ import { usePizzaStore } from '@/store/PizzaStore.js'
 	<FilterAndSearch />
 	<ProgressBar v-if="!usePizzaStore().itemsLoaded"/>
 	<CardList v-auto-animate />
+	
+	
 </template>
 
 <style scoped>
